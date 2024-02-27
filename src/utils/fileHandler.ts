@@ -32,23 +32,3 @@ export const FileHandler = {
         return pathOnR2 ? pathOnR2[0] : ""
     }
 }
-/* 
-export const getAllFiles = (dirPath:string):string[] => {
-    let results:string[] = []
-    fs.readdirSync(dirPath).forEach((file) => {
-        const completePathOfFile = path.join(dirPath, file)
-        const stat = fs.statSync(path.join(dirPath, file))
-        if(stat && stat.isDirectory()){
-            results = results.concat(getAllFiles(completePathOfFile))
-        }else{
-            results.push(completePathOfFile)
-        }
-    })
-    return results
-}
-
-export const getRepoDirPath = (sessionId: string):string => {
-    const pathToRepo = path.join(__dirname.replace('/dist/utils',''),'repos', sessionId)
-    return pathToRepo
-}
- */
