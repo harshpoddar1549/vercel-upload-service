@@ -21,10 +21,18 @@ export const FileHandler = {
         const pathToRepo = path.join(__dirname.replace('/dist/utils',''),'repos', sessionId)
         return pathToRepo
     },
-    uploadFilesfromLocalToR2 :  async (filePathArr: string[]) => {
-        await filePathArr.forEach(async (file)=>{
-            const filePath = FileHandler.getRepoDirPathForR2Upload(file)
-            await CloudFlare.uploadFileToR2(filePath, file)
+    uploadFilesfromLocalToR2 : async (filePathArr: string[]) => {
+        return new Promise(async (resolve, reject) => {
+            try{
+                const uploadPromises = filePathArr.map((file)=>{
+                    const filePath = FileHandler.getRepoDirPathForR2Upload(file)
+                    return CloudFlare.uploadFileToR2(filePath, file)
+                })
+                await Promise.all(uploadPromises)
+                resolve("success")
+            }catch(err){
+                reject(err)
+            }
         })
     },
     getRepoDirPathForR2Upload: (localFilePath: string):string => {
