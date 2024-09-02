@@ -13,12 +13,17 @@ export const DeployController = {
     uploadRepoUrl: async (req: Request, res:Response) => {
         const session = sessionGenerator()
         const url = req.body.repoUrl
+        const env = req.body.env
+        console.log("env:", env)
         try{
             /* Cloning the git repo */
             await simpleGit().clone(url, `./repos/${session}`)
 
             /* Reading all the files from the clones repo */
             const pathToClonedRepo = FileHandler.getRepoDirPathForLocalUpload(session)
+            /* If env.length != 0 add the .env file in it */
+            FileHandler.addEnvFile(env, pathToClonedRepo)
+            /*  */
             const allFilesUploadedArr = FileHandler.getAllFiles(pathToClonedRepo)
 
             /* Uploading Files to R2 Bucket */

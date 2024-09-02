@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import fs1 from 'fs/promises'
 import { CloudFlare } from './cloudflare'
 
 
@@ -38,5 +39,12 @@ export const FileHandler = {
     getRepoDirPathForR2Upload: (localFilePath: string):string => {
         const pathOnR2 = localFilePath.match(/repos\/.*$/)
         return pathOnR2 ? pathOnR2[0] : ""
+    },
+    addEnvFile: async (envData: {key:string, value:string}[], pathToClonedRepo:string) => {
+        const file = await fs1.open(path.join(pathToClonedRepo,".env"), "w")
+        for (let env of envData){
+            file.appendFile(env.key+"="+env.value+"\n")
+        }
+        await file.close()
     }
 }
